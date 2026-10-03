@@ -2,50 +2,50 @@
 
 # .git folder is hidden and stores information git uses to track project. Don't manually edit!!!!
 
-# Check Git Installation
+# 1. Check Git Installation
 # git --version
 #
-# configure git
+# 2. Configure git
 # git config --global user.name "user name"
 # git config --global user.email "user email"
 #
-# check config
+# 3. Check config
 # git config --global user.name 
 # git config --global user.email
 #
-# create project folder
+# 4. Create project folder
 # mkdir dir-name
 # cd dir-name
 #
-# Initialize git
+# 5. Initialize git
 # git init
 #
-# Check repository
+# 6. Check repository
 # git status
 #
-# add file to git
+# 7. Add file to git
 # git add README.md
 # or add all changed files
 # git add .
 #
-# Create a commit
+# 8. Create a commit
 # git commit -m "Add README file"
 # 
-# view commit history
+# 9. View commit history
 # get log --oneline
 #
-# Check current branch
+# 10. Check current branch
 # git branch
 #
-# connect to local reposity in github
+# 11. onnect to local reposity in github
 # git remote add origin https://given-by-github
 #
-# check the connection
+# 12. Check the connection
 # git remote -v
 #
-# push the project to github
+# 13.A Push the project to github
 # git push -u origin main
-# after first push:
-# git push
-# get changes from github
-# git pull
+#   13.B After first push:
+#   git push
+#   get changes from github
+#   git pull
