@@ -1,3 +1,9 @@
+# There are two copies of your project:
+#
+# Your computer: the local repository.
+# GitHub: the remote repository, which your computer nicknames origin.
+#
+#
 # My To-Do Project (Notes so far)
 
 # .git folder is hidden and stores information git uses to track project. Don't manually edit!!!!
