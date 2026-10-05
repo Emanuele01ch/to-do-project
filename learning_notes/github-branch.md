@@ -67,3 +67,11 @@
 # git status, git add ., git commit -m "feat: ..."
 # git push -u origin feat/name
 # Open PR on GitHub, review Files changed, merge
+#
+#
+# Pulizia opzionale dei branch:
+# git branch -d chore/clean-starter
+# git branch -d docs/learning-notes
+# git branch -d test/create-and-delete
+#
+# -d è la cancellazione sicura: rifiuta se il branch contiene commit non ancora uniti. Su GitHub, dopo il merge di una PR compare un pulsante Delete branch, che cancella la copia remota.
