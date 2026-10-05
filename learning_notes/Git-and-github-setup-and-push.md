@@ -43,7 +43,7 @@
 # 10. Check current branch
 # git branch
 #
-# 11. onnect to local reposity in github
+# 11. Connect to local reposity in github
 # git remote add origin https://given-by-github
 #
 # 12. Check the connection
