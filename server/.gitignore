@@ -1,0 +1,2 @@
+# Because .env will hold secrets in real projects, also create server/.gitignore with this single line, so the file never ends up in your repository:
+# .env
