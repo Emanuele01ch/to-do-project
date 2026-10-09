@@ -18,3 +18,11 @@ export function register(email, password) {
     body: JSON.stringify({ email, password }),
   });
 }
+
+export function verifyEmail(token) {
+  return request('/verify-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token }),
+  });
+}
