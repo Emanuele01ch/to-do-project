@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createTodo, deleteTodo, getTodos, setTodoCompleted } from './api/todos.js';
 import TodoForm from './components/TodoForm.jsx';
 import TodoList from './components/TodoList.jsx';
+import { Link } from 'react-router-dom';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -59,6 +60,14 @@ function App() {
   return (
     <div>
       <h1>My To-Do App</h1>
+      <p>
+        <Link to="/signup">
+          <button type="button">Sign up</button>
+        </Link>{' '}
+        <Link to="/login">
+          <button type="button">Log in</button>
+        </Link>
+      </p>
       <TodoForm title={title} onTitleChange={setTitle} onSubmit={handleSubmit} />
 
       {error && <p>Error: {error}</p>}
