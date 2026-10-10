@@ -36,11 +36,22 @@ function VerifyEmailPage() {
 
       {status === 'loading' && <p>Verifying your email...</p>}
       {status === 'success' && (
-        <p style={{ color: 'green' }}>{message}. You can now log in.</p>
+        <p style={{ color: 'green' }}>{message}.</p>
       )}
-      {status === 'error' && <p style={{ color: 'crimson' }}>{message}</p>}
+      {status === 'error' && 
+      <div style={{ marginTop: '15px' }}>
+            <p style={{ color: 'red' }}>{message}</p>
+            <p style={{ fontSize: '14px', marginTop: '10px' }}>
+            Need a fresh link?{' '}
+            <Link to="/resend-verification" style={{ color: '#007BFF', textDecoration: 'underline' }}>
+                Request a new verification email
+            </Link>
+            </p>
+        </div>}
 
       <p>
+        <Link to="/">Back to Home</Link>
+        <span style={{padding:'0 5px'}}>|</span>
         <Link to="/login">Go to log in</Link>
       </p>
     </div>
