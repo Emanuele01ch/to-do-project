@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { register } from '../api/auth';
+import Message from './Message';
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -34,42 +36,61 @@ function SignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Sign up</h2>
+    <div className="form-container">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
+        <h2>Sign up</h2>
 
-      <div>
-        <label htmlFor="signup-email">Email</label>
-        <br />
-        <input
-          id="signup-email"
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          autoComplete="email"
-          required
-        />
+        <div>
+          <label htmlFor="signup-email">Email</label>
+          <br />
+          <input
+            id="signup-email"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            autoComplete="email"
+            className='auth-input'
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="signup-password">Password (at least {MIN_PASSWORD_LENGTH} characters)</label>
+          <br />
+          <input
+            id="signup-password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            autoComplete="new-password"
+            className='auth-input'
+            required
+          />
+        </div>
+
+        <button className='auth-btn' type="submit" disabled={submitting}>
+          {submitting ? 'Creating account...' : 'Create account'}
+        </button>
+
+        {message && <Message type="success">{message}</Message>}
+        {error && <Message type="error">{error}</Message>}
+      </form>
+
+      <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px' }}>
+        <p>
+          Already signed up but didn't get the email?{' '}
+          <Link to="/resend-verification" style={{ color: '#007BFF', textDecoration: 'none' }}>
+            Resend verification link
+          </Link>
+        </p>
       </div>
 
-      <div>
-        <label htmlFor="signup-password">Password (at least {MIN_PASSWORD_LENGTH} characters)</label>
-        <br />
-        <input
-          id="signup-password"
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          autoComplete="new-password"
-          required
-        />
-      </div>
-
-      <button type="submit" disabled={submitting}>
-        {submitting ? 'Creating account...' : 'Create account'}
-      </button>
-
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
-      {message && <p style={{ color: 'green' }}>{message}</p>}
-    </form>
+      <p>
+        <Link to="/">Back to home</Link>
+        <span style={{padding:'0 5px'}}>|</span>
+        <Link to="/login">Log in</Link>
+      </p>
+    </div>
   );
 }
 
