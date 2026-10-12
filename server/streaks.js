@@ -52,3 +52,27 @@ export function settleHabit(habit, now = new Date()) {
   h.last_period = current;
   return h;
 }
+
+// Brings a daily task up to date after one or more days have passed.
+// Returns an updated copy and does not touch the database.
+export function settleDaily(daily, now = new Date()) {
+  const current = getPeriod(now, 'daily');
+  const d = { ...daily };
+
+  // Never checked before: start tracking from today.
+  if (d.last_period === null) {
+    d.last_period = current;
+    return d;
+  }
+
+  const ended = current - d.last_period; // days that finished since the last check
+  if (ended <= 0) return d; // still the same day
+
+  // The streak only grows if the last tracked day was completed
+  // and no day was skipped after it (ended === 1 means "yesterday").
+  d.streak = Boolean(d.completed) && ended === 1 ? d.streak + 1 : 0;
+
+  d.completed = false; // a new day starts unchecked
+  d.last_period = current;
+  return d;
+}
