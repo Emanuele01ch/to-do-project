@@ -4,10 +4,18 @@ import jwt from 'jsonwebtoken';
 import { getPeriod, settleDaily } from '../streaks.js';
 
 const router = Router();
-const COLUMNS = 'id, title, completed, streak, last_period, created_at';
+const COLUMNS = 'id, title, completed, streak, total_attempts, successful_periods, last_period, created_at';
 
 function toRecord(row) {
-  return { ...row, completed: Boolean(row.completed) };
+  return {
+    ...row,
+    completed: Boolean(row.completed),
+    // percentage of finished days that were a success (null until one day has ended)
+    success_rate:
+      row.total_attempts > 0
+        ? Math.round((row.successful_periods / row.total_attempts) * 100)
+        : null
+  };
 }
 
 function authenticateToken(req, res, next) {
@@ -30,9 +38,11 @@ async function settleAndSave(daily) {
   const settled = settleDaily(daily);
 
   if (settled.last_period !== daily.last_period) {
-    await pool.query(
-      'UPDATE dailies SET streak = ?, completed = ?, last_period = ? WHERE id = ?',
-      [settled.streak, settled.completed, settled.last_period, daily.id]
+        await pool.query(
+      `UPDATE dailies
+       SET streak = ?, total_attempts = ?, successful_periods = ?, completed = ?, last_period = ?
+       WHERE id = ?`,
+      [settled.streak, settled.total_attempts, settled.successful_periods, settled.completed, settled.last_period, daily.id]
     );
   }
 
