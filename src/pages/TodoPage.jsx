@@ -3,9 +3,10 @@ import { createTodo, deleteTodo, getTodos, setTodoCompleted } from '../api/todos
 import TodoForm from '../components/TodoForm.jsx';
 import TodoList from '../components/TodoList.jsx';
 import Navbar from '../components/Navbar.jsx';
+import BottomNav from '../components/BottomNav.jsx';
 import { useNavigate } from 'react-router-dom';
 
-export default function DashboardPage() {
+export default function TodoPage() {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState(null);
   const [title, setTitle] = useState('');
@@ -14,7 +15,6 @@ export default function DashboardPage() {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    // Protect the route: if no token, redirect to login
     if (!token) {
       navigate('/login');
       return;
@@ -72,11 +72,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div>
+    <div style={{ paddingBottom: '80px' }}>
       <Navbar isLoggedIn={!!token} onLogout={handleLogout} />
 
       <div style={{ maxWidth: '600px', margin: '40px auto', padding: '0 20px' }}>
-        <h1>My Dashboard</h1>
+        <h1>My To-Dos 📝</h1>
 
         <TodoForm title={title} onTitleChange={setTitle} onSubmit={handleSubmit} />
 
@@ -84,6 +84,8 @@ export default function DashboardPage() {
 
         <TodoList todos={todos} onToggle={handleToggle} onDelete={handleDelete} />
       </div>
+
+      <BottomNav />
     </div>
   );
 }
