@@ -40,7 +40,7 @@ export default function Navbar({ isLoggedIn, onLogout }) {
             <Link to="/" onClick={() => setIsOpen(false)} style={{ textDecoration: 'none', color: '#333', fontSize: '14px' }}>Home</Link>
             
             {isLoggedIn && (
-              <Link to="/app" onClick={() => setIsOpen(false)} style={{ textDecoration: 'none', color: '#333', fontSize: '14px', fontWeight: 'bold' }}>Dashboard</Link>
+              <Link to="/todos" onClick={() => setIsOpen(false)} style={{ textDecoration: 'none', color: '#333', fontSize: '14px', fontWeight: 'bold' }}>Dashboard</Link>
             )}
 
             {isLoggedIn ? (
