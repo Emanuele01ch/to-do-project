@@ -19,7 +19,7 @@ export default function HomePage() {
 
         <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center', gap: '15px' }}>
           {isLoggedIn ? (
-            <Link to="/app">
+            <Link to="/todos">
               <button style={{ padding: '12px 24px', background: '#007BFF', color: 'white', border: 'none', borderRadius: '6px', fontSize: '16px', cursor: 'pointer', fontWeight: 'bold' }}>
                 Go to My Dashboard
               </button>
