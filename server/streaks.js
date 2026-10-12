@@ -68,9 +68,15 @@ export function settleDaily(daily, now = new Date()) {
   const ended = current - d.last_period; // days that finished since the last check
   if (ended <= 0) return d; // still the same day
 
-  // The streak only grows if the last tracked day was completed
-  // and no day was skipped after it (ended === 1 means "yesterday").
-  d.streak = Boolean(d.completed) && ended === 1 ? d.streak + 1 : 0;
+  const wasCompleted = Boolean(d.completed);
+
+  // Every finished day is an attempt. Only the last tracked day can have been
+  // completed, because the user couldn't check the box on days they were away.
+  d.total_attempts += ended;
+  if (wasCompleted) d.successful_periods += 1;
+
+  // The streak only grows if that day was completed and no day was skipped after it.
+  d.streak = wasCompleted && ended === 1 ? d.streak + 1 : 0;
 
   d.completed = false; // a new day starts unchecked
   d.last_period = current;
