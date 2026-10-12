@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import pool from '../db.js';
 import jwt from 'jsonwebtoken';
+import { getPeriod, settleDaily } from '../streaks.js';
 
 const router = Router();
-const COLUMNS = 'id, title, completed, created_at';
+const COLUMNS = 'id, title, completed, streak, last_period, created_at';
 
 function toRecord(row) {
   return { ...row, completed: Boolean(row.completed) };
@@ -24,14 +25,31 @@ function authenticateToken(req, res, next) {
 
 router.use(authenticateToken);
 
-async function getById(id, userId) {
+// Settles a daily task (handles days that ended) and saves the result if the day changed.
+async function settleAndSave(daily) {
+  const settled = settleDaily(daily);
+
+  if (settled.last_period !== daily.last_period) {
+    await pool.query(
+      'UPDATE dailies SET streak = ?, completed = ?, last_period = ? WHERE id = ?',
+      [settled.streak, settled.completed, settled.last_period, daily.id]
+    );
+  }
+
+  return settled;
+}
+
+// Loads one daily task, up to date. Returns null if it doesn't exist.
+async function loadSettled(id, userId) {
   const [rows] = await pool.query(`SELECT ${COLUMNS} FROM dailies WHERE id = ? AND user_id = ?`, [id, userId]);
-  return rows.length > 0 ? toRecord(rows[0]) : null;
+  if (rows.length === 0) return null;
+  return settleAndSave(rows[0]);
 }
 
 router.get('/', async (req, res) => {
   const [rows] = await pool.query(`SELECT ${COLUMNS} FROM dailies WHERE user_id = ? ORDER BY id`, [req.user.id]);
-  res.json(rows.map(toRecord));
+  const settled = await Promise.all(rows.map(settleAndSave));
+  res.json(settled.map(toRecord));
 });
 
 router.post('/', async (req, res) => {
@@ -40,8 +58,13 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Title is required' });
   }
 
-  const [result] = await pool.query('INSERT INTO dailies (title, user_id) VALUES (?, ?)', [title.trim(), req.user.id]);
-  res.status(201).json(await getById(result.insertId, req.user.id));
+  const [result] = await pool.query(
+    'INSERT INTO dailies (title, last_period, user_id) VALUES (?, ?, ?)',
+    [title.trim(), getPeriod(new Date(), 'daily'), req.user.id]
+  );
+
+  const daily = await loadSettled(result.insertId, req.user.id);
+  res.status(201).json(toRecord(daily));
 });
 
 router.patch('/:id', async (req, res) => {
@@ -52,10 +75,14 @@ router.patch('/:id', async (req, res) => {
     return res.status(400).json({ error: 'Invalid parameters' });
   }
 
-  const [result] = await pool.query('UPDATE dailies SET completed = ? WHERE id = ? AND user_id = ?', [completed, id, req.user.id]);
-  if (result.affectedRows === 0) return res.status(404).json({ error: 'Daily task not found' });
+  // Settle first, so the toggle applies to today's state and not to yesterday's
+  const daily = await loadSettled(id, req.user.id);
+  if (!daily) return res.status(404).json({ error: 'Daily task not found' });
 
-  res.json(await getById(id, req.user.id));
+  await pool.query('UPDATE dailies SET completed = ? WHERE id = ? AND user_id = ?', [completed, id, req.user.id]);
+  daily.completed = completed;
+
+  res.json(toRecord(daily));
 });
 
 router.delete('/:id', async (req, res) => {
