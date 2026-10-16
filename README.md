@@ -126,12 +126,14 @@ create file .env
 ### Paste the following credentials:
 
 ```
-PORT=5000
-DB_HOST=localhost
+DB_HOST=127.0.0.1
+DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=          # leave blank if using default XAMPP/Laragon setup
-DB_NAME=todo_app      # match the database name you created in phpMyAdmin
-JWT_SECRET=your_super_secret_key_here
+DB_PASSWORD=
+DB_NAME=todo_app
+
+CLIENT_URL=http://localhost:5173
+JWT_SECRET=my_super_secret_key_12345_change_this
 ```
 
 ## start backend server:
