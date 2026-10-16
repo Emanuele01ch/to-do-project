@@ -11,8 +11,10 @@ Open your terminal and clone the repository to your local machine:
 ```bash
 git clone https://github.com/Emanuele01ch/to-do-project
 cd to-do-progect
+```
 
 ### Create DB with this sql code in phpmyadmin:
+```
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -113,28 +115,38 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+```
 
-# Create .env file in server folder:
+### Create .env file in server folder:
+```
 cd server
 create file .env
-paste the following credentials:
 
+```
+### Paste the following credentials:
+
+```
 PORT=5000
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=          # leave blank if using default XAMPP/Laragon setup
 DB_NAME=todo_app      # match the database name you created in phpMyAdmin
 JWT_SECRET=your_super_secret_key_here
+```
 
-start backend server:
-# Make sure you are inside the /server folder
+## start backend server:
+## Make sure you are inside the /server folder
+```
 npm install
 npm run dev
+```
 
-start react frontend:
+## start react frontend:
+```
 cd client
 npm install
 npm run dev
+```
 
-(This automatically installs: bcryptjs, cors, dotenv, express, jsonwebtoken, mysql2, and nodemailer from your package.json)
-check server/package.json.
+#### (This automatically installs: bcryptjs, cors, dotenv, express, jsonwebtoken, mysql2, and nodemailer from your package.json)
+#### check server/package.json.
